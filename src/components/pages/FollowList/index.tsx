@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { Button } from 'react-native-elements';
 
 const styles = StyleSheet.create({
   container: {
@@ -13,6 +14,7 @@ export default function MyPage() {
   return (
     <View style={styles.container}>
       <Text>フォロー一覧</Text>
+      <Button title="Button1"/>
     </View>
   );
 }

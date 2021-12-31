@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "/Users/takeuchiayumi/Desktop/Takeuchi/19.TypeScript01/KatatakiApp/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-th/values-th.xml",
+            "outputFile": "/Users/takeuchiayumi/Desktop/katatakiApp/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-th/values-th.xml",
             "map": [
                 {
                     "source": "/Users/takeuchiayumi/.gradle/caches/transforms-3/5efa136d6b7a2c594211658eacead3c1/transformed/core-1.6.0/res/values-th/values-th.xml",

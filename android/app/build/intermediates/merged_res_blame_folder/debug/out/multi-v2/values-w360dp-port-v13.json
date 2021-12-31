@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "/Users/takeuchiayumi/Desktop/Takeuchi/19.TypeScript01/KatatakiApp/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-w360dp-port-v13/values-w360dp-port-v13.xml",
+            "outputFile": "/Users/takeuchiayumi/Desktop/katatakiApp/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-w360dp-port-v13/values-w360dp-port-v13.xml",
             "map": [
                 {
                     "source": "/Users/takeuchiayumi/.gradle/caches/transforms-3/94ecee73d302f93903038c0fd7a3667d/transformed/material-1.1.0/res/values-w360dp-port-v13/values-w360dp-port-v13.xml",
