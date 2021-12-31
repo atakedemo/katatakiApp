@@ -1,0 +1,14 @@
+com/katatakiapp/BuildConfig.java
+ com.katatakiapp.BuildConfig
+com/katatakiapp/ReactNativeFlipper.java
+ com.katatakiapp.ReactNativeFlipper
+ com.katatakiapp.ReactNativeFlipper$1
+ com.katatakiapp.ReactNativeFlipper$2
+ com.katatakiapp.ReactNativeFlipper$2$1
+com/katatakiapp/MainActivity.java
+ com.katatakiapp.MainActivity
+com/katatakiapp/MainApplication.java
+ com.katatakiapp.MainApplication
+ com.katatakiapp.MainApplication$1
+com/facebook/react/PackageList.java
+ com.facebook.react.PackageList
