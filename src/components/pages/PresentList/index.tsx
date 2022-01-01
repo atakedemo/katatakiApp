@@ -1,6 +1,7 @@
-import React, { Component }  from 'react';
+//import React, { useState  }  from 'react';
+import React, { useState  } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { Button, Divider } from 'react-native-elements'
+import { Tab, TabView } from 'react-native-elements'
 
 const styles = StyleSheet.create({
   container: {
@@ -10,33 +11,58 @@ const styles = StyleSheet.create({
   },
 });
 
+//const [index, setIndex] = useState(0);
+
 /*
-export default function MyPage() {
+export default class PresentList extends Component{
+  click(){
+    alert('XXXSX');
+  }
+  render() {
+*/
+
+export default function PresentList() {
+  const [index, setIndex] = useState(0);
+
   return (
     <View style={styles.container}>
-      <Text>プレゼント一覧</Text>
+      <Tab
+        value={index}
+        onChange={(e) => setIndex(e)}
+        indicatorStyle={{
+          backgroundColor: 'white',
+          height: 3,
+        }}
+        variant="primary"
+      >
+        <Tab.Item
+          title="Recent"
+          titleStyle={{ fontSize: 12 }}
+          icon={{ name: 'timer', type: 'ionicon', color: 'white' }}
+        />
+        <Tab.Item
+          title="favorite"
+          titleStyle={{ fontSize: 12 }}
+          icon={{ name: 'heart', type: 'ionicon', color: 'white' }}
+        />
+        <Tab.Item
+          title="cart"
+          titleStyle={{ fontSize: 12 }}
+          icon={{ name: 'cart', type: 'ionicon', color: 'white' }}
+        />
+      </Tab>
+
+      <TabView value={index-1} onChange={setIndex} animationType="spring">
+        <TabView.Item style={{ backgroundColor: 'red', width: '100%' }}>
+          <Text>Recent</Text>
+        </TabView.Item>
+        <TabView.Item style={{ backgroundColor: 'blue', width: '100%' }}>
+          <Text>Favorite</Text>
+        </TabView.Item>
+        <TabView.Item style={{ backgroundColor: 'green', width: '100%' }}>
+          <Text>Cart</Text>
+        </TabView.Item>
+      </TabView>
     </View>
   );
-}*/
-
-export default class MyPage extends Component{
-  click(){
-    alert('XXX');
-  }
-
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text>プレゼント一覧</Text>
-        <Button 
-          large
-          backgroundColor='#53DCD0'
-          icon={{name: 'android'}}// nameにアイコン名を指定
-          title='Weeei Button!'
-          onPress={this.click}
-        />
-        <Divider style={{ backgroundColor: 'blue' }} />
-      </View>
-    );
-  }
 }
