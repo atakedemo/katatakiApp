@@ -3,6 +3,9 @@ import React, { useState  } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Tab, TabView } from 'react-native-elements'
 
+//import OwnList from './Own';
+import ReceiveList from './Receive';
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -10,16 +13,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
-
-//const [index, setIndex] = useState(0);
-
 /*
-export default class PresentList extends Component{
-  click(){
-    alert('XXXSX');
-  }
-  render() {
-*/
+const routes = [
+  { key: 'tab1', title: 'タブ1' },
+  { key: 'tab2', title: 'タブ2' }
+];*/
 
 export default function PresentList() {
   const [index, setIndex] = useState(0);
@@ -53,13 +51,13 @@ export default function PresentList() {
       </Tab>
 
       <TabView value={index-1} onChange={setIndex} animationType="spring">
-        <TabView.Item style={{ backgroundColor: 'red', width: '100%' }}>
-          <Text>Recent</Text>
+        <TabView.Item style={{ backgroundColor: 'white', width: '100%' }}>
+          <ReceiveList />
         </TabView.Item>
-        <TabView.Item style={{ backgroundColor: 'blue', width: '100%' }}>
+        <TabView.Item style={{ backgroundColor: 'white', width: '100%' }}>
           <Text>Favorite</Text>
         </TabView.Item>
-        <TabView.Item style={{ backgroundColor: 'green', width: '100%' }}>
+        <TabView.Item style={{ backgroundColor: 'white', width: '100%' }}>
           <Text>Cart</Text>
         </TabView.Item>
       </TabView>
