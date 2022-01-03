@@ -11,8 +11,16 @@ import com.facebook.react.shell.MainReactPackage;
 import java.util.Arrays;
 import java.util.ArrayList;
 
+// @react-native-async-storage/async-storage
+import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 // @react-native-community/masked-view
 import org.reactnative.maskedview.RNCMaskedViewPackage;
+// @react-native-community/netinfo
+import com.reactnativecommunity.netinfo.NetInfoPackage;
+// @react-native-picker/picker
+import com.reactnativecommunity.picker.RNCPickerPackage;
+// amazon-cognito-identity-js
+import com.amazonaws.RNAWSCognitoPackage;
 // react-native-gesture-handler
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 // react-native-safe-area-context
@@ -66,7 +74,11 @@ public class PackageList {
   public ArrayList<ReactPackage> getPackages() {
     return new ArrayList<>(Arrays.<ReactPackage>asList(
       new MainReactPackage(mConfig),
+      new AsyncStoragePackage(),
       new RNCMaskedViewPackage(),
+      new NetInfoPackage(),
+      new RNCPickerPackage(),
+      new RNAWSCognitoPackage(),
       new RNGestureHandlerPackage(),
       new SafeAreaContextPackage(),
       new RNScreensPackage(),
