@@ -46,6 +46,7 @@ type ListComponentProps = ListItemProps;
 
 const ReceiveList  : React.FunctionComponent<ListComponentProps> = () => {
   const [isVisible, setIsVisible] = useState(false);
+  /*
   const bottomlist = [
     { title: 'List Item 1' },
     { title: 'List Item 2' },
@@ -56,6 +57,7 @@ const ReceiveList  : React.FunctionComponent<ListComponentProps> = () => {
       onPress: () => setIsVisible(false),
     },
   ];
+  */
   return (
     //ToDo: ルート設定を行った後で、詳細画面への遷移処理を追加する
     //ToDo: 編集画面をBottomSheetで実装する

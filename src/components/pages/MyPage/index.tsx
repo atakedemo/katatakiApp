@@ -1,9 +1,10 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { Button } from 'react-native-elements';
+import { Button, ListItem, ListItemProps } from 'react-native-elements';
 import { Auth } from 'aws-amplify';
 
 import getList from '../../apis/present';
+import { Item } from 'react-native-paper/lib/typescript/components/List/List';
 
 const styles = StyleSheet.create({
   container: {
@@ -21,18 +22,44 @@ async function signOut() {
   }
 }
 
-export default function MyPage() {
+const menuList = [
+  {
+    title: 'サインアウト',
+    onPress: () => signOut()
+  },
+  {
+    title: 'アカウント情報変更',
+    onPress: () => getList()
+  },
+  {
+    title: '設定',
+    onPress: () => getList()
+  }
+]
+
+type ListComponentProps = ListItemProps;
+
+//export default function MyPage() {
+const MyPage : React.FunctionComponent<ListComponentProps> = () => {
   return (
     <View style={styles.container}>
-      <Text>マイページ</Text>
-      <Button 
-        title='テスト'
-        onPress={() => getList()}
-      />
-      <Button 
-        title='テスト'
-        onPress={() => signOut()}
-      />
+      {
+        menuList.map((item, i) => (
+          <ListItem 
+            key={i} 
+            bottomDivider
+            onPress={item.onPress}
+            style={{ backgroundColor: 'white', width: '100%' }}
+          >
+            <ListItem.Content>
+              <ListItem.Title>{item.title}</ListItem.Title>
+            </ListItem.Content>
+            <ListItem.Chevron />
+          </ListItem>
+        ))
+      }
     </View>
   );
 }
+
+export default MyPage

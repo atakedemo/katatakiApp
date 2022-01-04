@@ -1,7 +1,5 @@
-import React from 'react';
+//import React from 'react';
 import { Auth, API } from 'aws-amplify';
-import {name as appName} from '../../../app.json';
-import { Alert } from '@aws-amplify/ui-react';
 
 const getList = async function() {
     //const apiName = appName;

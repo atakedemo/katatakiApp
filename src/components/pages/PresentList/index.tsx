@@ -34,19 +34,19 @@ export default function PresentList() {
         variant="primary"
       >
         <Tab.Item
-          title="Recent"
+          title="もらったプレゼント"
           titleStyle={{ fontSize: 12 }}
-          icon={{ name: 'timer', type: 'ionicon', color: 'white' }}
+          //icon={{ name: 'timer', type: 'ionicon', color: 'white' }}
         />
         <Tab.Item
-          title="favorite"
+          title="あげたプレゼント"
           titleStyle={{ fontSize: 12 }}
-          icon={{ name: 'heart', type: 'ionicon', color: 'white' }}
+          //icon={{ name: 'heart', type: 'ionicon', color: 'white' }}
         />
         <Tab.Item
           title="cart"
           titleStyle={{ fontSize: 12 }}
-          icon={{ name: 'cart', type: 'ionicon', color: 'white' }}
+          //icon={{ name: 'cart', type: 'ionicon', color: 'white' }}
         />
       </Tab>
 
