@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
-import { ListItem, ListItemProps, Avatar, BottomSheet } from 'react-native-elements'
-import { useNavigation } from '@react-navigation/native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { ListItem, ListItemProps, Avatar, BottomSheet, Card, Button } from 'react-native-elements'
+//import { useNavigation } from '@react-navigation/native';
+//import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 //import { DETAIL } from '../../../../constants/screen';
 
@@ -42,12 +42,9 @@ const list = [
 ]
 
 
-//type BottomSheetComponentProps = {};
 type ListComponentProps = ListItemProps;
 
 const ReceiveList  : React.FunctionComponent<ListComponentProps> = () => {
-//const ReceiveList  : React.FunctionComponent<BottomSheetComponentProps> = () => {
-  //const { navigate } = useNavigation(); ※ページ遷移の確認時に実装
   const [isVisible, setIsVisible] = useState(false);
   const bottomlist = [
     { title: 'List Item 1' },
@@ -76,17 +73,24 @@ const ReceiveList  : React.FunctionComponent<ListComponentProps> = () => {
           ))
         }
         <BottomSheet modalProps={{}} isVisible={isVisible}>
-          {bottomlist.map((l, i) => (
-            <ListItem
-              key={i}
-              containerStyle={l.containerStyle}
-              onPress={l.onPress}
-            >
-              <ListItem.Content>
-                <ListItem.Title style={l.titleStyle}>{l.title}</ListItem.Title>
-              </ListItem.Content>
-            </ListItem>
-          ))}
+          <Card containerStyle={{ marginTop: 15 }}>
+            <Card.Title>FONTS</Card.Title>
+            <Card.Divider />
+            <Text>h1 Heading</Text>
+            <Text>h1 Heading</Text>
+            <Text>h1 Heading</Text>
+            <Text>h1 Heading</Text>
+          </Card>
+          <Button
+            buttonStyle={{
+              borderRadius: 0,
+              marginLeft: 0,
+              marginRight: 0,
+              marginBottom: 0,
+            }}
+            title="キャンセル"
+            onPress={() => setIsVisible(false)}
+          />
         </BottomSheet>
     </View>
   );
