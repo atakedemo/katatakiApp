@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import MainRouter from './routes';
-import { withAuthenticator } from 'aws-amplify-react-native'
+import { withAuthenticator } from 'aws-amplify-react-native/src'
 /*
 export default function App() {
   return <MainRouter />;
