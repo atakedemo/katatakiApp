@@ -1,10 +1,9 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { Button, ListItem, ListItemProps } from 'react-native-elements';
+import { ListItem, ListItemProps } from 'react-native-elements';
 import { Auth } from 'aws-amplify';
 
 import getList from '../../apis/present';
-import { Item } from 'react-native-paper/lib/typescript/components/List/List';
 
 const styles = StyleSheet.create({
   container: {
@@ -39,7 +38,6 @@ const menuList = [
 
 type ListComponentProps = ListItemProps;
 
-//export default function MyPage() {
 const MyPage : React.FunctionComponent<ListComponentProps> = () => {
   return (
     <View style={styles.container}>
