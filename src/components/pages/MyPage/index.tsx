@@ -3,11 +3,6 @@ import { StyleSheet, Text, View } from 'react-native';
 import { ListItem, ListItemProps } from 'react-native-elements';
 import { Auth } from 'aws-amplify';
 
-<<<<<<< HEAD
-import getPresents from '../../apis/present';
-=======
-import getList from '../../apis/present';
->>>>>>> 234f3c6f5883279b58f788674f35d7c7a87542ac
 
 const styles = StyleSheet.create({
   container: {
@@ -32,19 +27,12 @@ const menuList = [
   },
   {
     title: 'アカウント情報変更',
-<<<<<<< HEAD
-    onPress: () => getPresents()
   },
   {
-    title: '設定',
-    onPress: () => getPresents()
-=======
-    onPress: () => getList()
+    title: '設定'
   },
   {
-    title: '設定',
-    onPress: () => getList()
->>>>>>> 234f3c6f5883279b58f788674f35d7c7a87542ac
+    title: '設定'
   }
 ]
 

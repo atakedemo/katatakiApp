@@ -1,17 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
-import { ListItem, ListItemProps, Avatar, BottomSheet, Card, Button } from 'react-native-elements';
+import { FlatList, View, StyleSheet, Text, ActivityIndicator } from 'react-native';
+import { ListItem, ListItemProps, Avatar, BottomSheet, Card, Button, Image } from 'react-native-elements';
 import { Auth, API } from 'aws-amplify';
 
-//import getPresents from '../../../apis/present';
+const BASE_URI = 'https://katataki-prod-images.s3.ap-northeast-1.amazonaws.com/sample_cooking.png';
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
 type ListComponentProps = ListItemProps;
 
 const OwnList : React.FunctionComponent<ListComponentProps> = () => {
@@ -61,13 +54,33 @@ const OwnList : React.FunctionComponent<ListComponentProps> = () => {
         }
 
         <BottomSheet modalProps={{}} isVisible={isVisible}>
-          <Card containerStyle={{ marginTop: 15 }}>
+          <Card containerStyle={{ marginTop: 15, width: '100%' }}>
             <Card.Title>{tmpPresent['present_name']}</Card.Title>
             <Card.Divider />
             <Text>利用者: {tmpPresent['user_id_receive']}</Text>
             <Text>h1 Heading</Text>
             <Text>h1 Heading</Text>
-            <Text>作成日: {tmpPresent['date_created']}</Text>
+            <Text style={{ marginBottom: 15}}>作成日: {tmpPresent['date_created']}</Text>
+            <View style={styles.imgList}>
+              <Image
+                source={{ uri: BASE_URI}}
+                containerStyle={styles.item}
+              />
+              <Image
+                source={{ uri: BASE_URI}}
+                containerStyle={styles.item}
+              />
+            </View>
+            <View style={styles.imgList}>
+              <Image
+                source={{ uri: BASE_URI}}
+                containerStyle={styles.item}
+              />
+              <Image
+                source={{ uri: BASE_URI}}
+                containerStyle={styles.item}
+              />
+            </View>
           </Card>
           <Button
             buttonStyle={{
@@ -83,5 +96,24 @@ const OwnList : React.FunctionComponent<ListComponentProps> = () => {
     </View>
   );
 }
+
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  imgList: {
+    width: '100%',
+    backgroundColor: '#ffffff',
+    flex: 1,
+    flexDirection: 'row',
+  },
+  item: {
+    aspectRatio: 1,
+    width: '50%',
+  },
+});
 
 export default OwnList

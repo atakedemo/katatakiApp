@@ -1,13 +1,6 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { ListItem, ListItemProps, Avatar, BottomSheet, Card, Button } from 'react-native-elements'
-<<<<<<< HEAD
-=======
-//import { useNavigation } from '@react-navigation/native';
-//import { SafeAreaProvider } from 'react-native-safe-area-context';
-
-//import { DETAIL } from '../../../../constants/screen';
->>>>>>> 234f3c6f5883279b58f788674f35d7c7a87542ac
 
 const styles = StyleSheet.create({
   container: {
@@ -49,21 +42,6 @@ type ListComponentProps = ListItemProps;
 
 const ReceiveList  : React.FunctionComponent<ListComponentProps> = () => {
   const [isVisible, setIsVisible] = useState(false);
-<<<<<<< HEAD
-=======
-  /*
-  const bottomlist = [
-    { title: 'List Item 1' },
-    { title: 'List Item 2' },
-    {
-      title: 'Cancel',
-      containerStyle: { backgroundColor: 'red' },
-      titleStyle: { color: 'white' },
-      onPress: () => setIsVisible(false),
-    },
-  ];
-  */
->>>>>>> 234f3c6f5883279b58f788674f35d7c7a87542ac
   return (
     //ToDo: ルート設定を行った後で、詳細画面への遷移処理を追加する
     //ToDo: 編集画面をBottomSheetで実装する
