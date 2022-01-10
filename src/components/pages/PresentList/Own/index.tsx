@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { FlatList, View, StyleSheet, Text, ActivityIndicator } from 'react-native';
 import { ListItem, ListItemProps, Avatar, BottomSheet, Card, Button, Image } from 'react-native-elements';
 import { Auth, API } from 'aws-amplify';
+import { View, StyleSheet, Text} from 'react-native';
 
 const BASE_URI = 'https://katataki-prod-images.s3.ap-northeast-1.amazonaws.com/sample_cooking.png';
 
@@ -53,11 +53,14 @@ const OwnList : React.FunctionComponent<ListComponentProps> = () => {
           ))
         }
 
-        <BottomSheet modalProps={{}} isVisible={isVisible}>
-          <Card containerStyle={{ marginTop: 15, width: '100%' }}>
+        <BottomSheet modalProps={{}} isVisible={isVisible} containerStyle={{height: '100%'}}>
+          <Card containerStyle={{ marginTop: 0, marginLeft: 0,width: '100%' }}>
             <Card.Title>{tmpPresent['present_name']}</Card.Title>
             <Card.Divider />
             <Text>利用者: {tmpPresent['user_id_receive']}</Text>
+            <Text>h1 Heading</Text>
+            <Text>h1 Heading</Text>
+            <Text>h1 Heading</Text>
             <Text>h1 Heading</Text>
             <Text>h1 Heading</Text>
             <Text style={{ marginBottom: 15}}>作成日: {tmpPresent['date_created']}</Text>
@@ -82,6 +85,15 @@ const OwnList : React.FunctionComponent<ListComponentProps> = () => {
               />
             </View>
           </Card>
+          <Button
+            buttonStyle={{
+              borderRadius: 0,
+              marginLeft: 0,
+              marginRight: 0,
+              marginBottom: 0,
+            }}
+            title="編集"
+          />
           <Button
             buttonStyle={{
               borderRadius: 0,
