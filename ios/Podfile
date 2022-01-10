@@ -12,6 +12,8 @@ target 'KatatakiApp' do
     :hermes_enabled => false
   )
 
+  pod 'RNAWSCognito', :path => '../node_modules/amazon-cognito-identity-js'
+
   target 'KatatakiAppTests' do
     inherit! :complete
     # Pods for testing
