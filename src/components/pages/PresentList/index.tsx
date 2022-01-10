@@ -3,7 +3,11 @@ import React, { useState  } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Tab, TabView } from 'react-native-elements'
 
+<<<<<<< HEAD
 import OwnList from './Own';
+=======
+//import OwnList from './Own';
+>>>>>>> 234f3c6f5883279b58f788674f35d7c7a87542ac
 import ReceiveList from './Receive';
 
 const styles = StyleSheet.create({
@@ -39,7 +43,11 @@ export default function PresentList() {
           //icon={{ name: 'timer', type: 'ionicon', color: 'white' }}
         />
         <Tab.Item
+<<<<<<< HEAD
           title="あげるプレゼント"
+=======
+          title="あげたプレゼント"
+>>>>>>> 234f3c6f5883279b58f788674f35d7c7a87542ac
           titleStyle={{ fontSize: 12 }}
           //icon={{ name: 'heart', type: 'ionicon', color: 'white' }}
         />
@@ -55,7 +63,11 @@ export default function PresentList() {
           <ReceiveList />
         </TabView.Item>
         <TabView.Item style={{ backgroundColor: 'white', width: '100%' }}>
+<<<<<<< HEAD
           <OwnList />
+=======
+          <Text>Favorite</Text>
+>>>>>>> 234f3c6f5883279b58f788674f35d7c7a87542ac
         </TabView.Item>
         <TabView.Item style={{ backgroundColor: 'white', width: '100%' }}>
           <Text>Cart</Text>
