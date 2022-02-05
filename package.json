@@ -25,7 +25,7 @@
     "aws-amplify-react": "^5.1.9",
     "aws-amplify-react-native": "^6.0.2",
     "react": "17.0.2",
-    "react-hook-form": "^7.22.5",
+    "react-hook-form": "^7.26.0",
     "react-native": "0.66.4",
     "react-native-elements": "^3.4.2",
     "react-native-gesture-handler": "2.1.0",
