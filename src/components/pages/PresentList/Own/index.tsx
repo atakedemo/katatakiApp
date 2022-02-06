@@ -11,8 +11,18 @@ const BASE_URI = 'https://katataki-prod-images.s3.ap-northeast-1.amazonaws.com/s
 type ListComponentProps = ListItemProps;
 
 const OwnList : React.FunctionComponent<ListComponentProps> = () => {
-  const [presents, setPresents] = useState([]); //プレゼント情報
-  const [tmpPresent, setTmpPresent] = useState({}) //編集プレゼント情報
+  const [presents, setPresents] = useState([]); //プレゼント一覧
+  const [tmpPresent, setTmpPresent] = useState({
+    present_id: '-',
+    present_name: '-',
+    present_status: {
+      owner: '-',
+      reciever: "-",
+      id: "ph00"
+    },
+    present_images: [],
+    user_id_receive: '-'
+  }) //編集プレゼント情報
   const [tmpIndex, setTmpIndex] = useState(0) //編集プレゼント情報
   const [isVisibleRead, setIsVisibleRead] = useState(false); //プレゼント編集モーダル表示フラグ
   const [isVisibleEdit, setIsVisibleEdit] = useState(false); //編集用モーダル表示フラグ
@@ -35,32 +45,32 @@ const OwnList : React.FunctionComponent<ListComponentProps> = () => {
   }
 
   //ToDo：インデックス情報を渡す
-  const readPresent = (item: object, index:number) => {
+  const readPresent = (item, index:number) => {
     setIsVisibleRead(true);
     setTmpPresent(item);
     setTmpIndex(index);
   }
 
-  const editPresent = (item: object, index:number) => {
+  const editPresent = (item, index:number) => {
     setIsVisibleEdit(true);
     setTmpPresent(item);
+    setValue('present_name', tmpPresent['present_name'])
+    setValue('present_status', tmpPresent['present_status']['id'])
+    setValue('user_id_receive', tmpPresent['user_id_receive'])
   }
 
   //プレゼント編集フォームの設定
-  const { control, handleSubmit, formState: { errors } } = useForm({
-    defaultValues: {
-      firstName: '',
-      lastName: ''
-    }
+  const { control, handleSubmit, reset, setValue, formState: { errors } } = useForm({
   });
   const onSubmit = data => {
     console.log(data);
-    commitPresents();
+    commitPresents(data);
+    reset();
   };
 
   //ToDo: プレゼント編集結果保存処理
   //ToDo：レスポンス(単一の情報を差し込む)
-  const commitPresents = async () => {
+  const commitPresents = async (data) => {
     const apiName = 'APIGateway';
     const path = '/dev/presents/commit-own'; 
     const reqInfo = { 
@@ -69,24 +79,27 @@ const OwnList : React.FunctionComponent<ListComponentProps> = () => {
       },
       body: {
         present_id: "p99",
-        present_name: "testRN",
+        present_name: data.present_name,
         present_status: {
-          owner: "送付前",
+          owner: data.present_status,
           reciever: "-",
           id: "ph01"
         },
         present_images: [],
-        user_id_receive: "000"
+        user_id_receive: data.user_id_receive
       },
     };
     
     API.post(apiName, path, reqInfo)
     .then(response => {
       console.log(response.body)
-      let tmplist:object = presents
-      //tmplist[tmpIndex] = JSON.parse(response.body)
-      console.log(tmplist)
-      //setPresents(JSON.parse(response.body).Items)
+      let tmplist = presents
+      //let resdata = JSON.parse(response.body).Attributes
+      console.log(JSON.parse(response.body).Attributes)
+      tmplist.splice(tmpIndex, 1, JSON.parse(response.body).Attributes)
+      setPresents(tmplist)
+      setIsVisibleEdit(false);
+      setIsVisibleRead(false);
     })
     .catch(err => {
       console.log(err);
@@ -166,19 +179,17 @@ const OwnList : React.FunctionComponent<ListComponentProps> = () => {
             onPress={() => setIsVisibleRead(false)}
           />
         </BottomSheet>
-        <BottomSheet modalProps={{}} isVisible={isVisibleEdit} containerStyle={{height: '100%'}}>
+
+        {/*編集メニュー*/}
+        <BottomSheet modalProps={{}} isVisible={isVisibleEdit} containerStyle={{height: '100%',backgroundColor: '#ffffff'}}>
           <Card containerStyle={{ marginTop: 0, marginLeft: 0,width: '100%' }}>
             <Card.Title>編集 : {tmpPresent['present_name']}</Card.Title>
             <Text>h1 Heading</Text>
           </Card>
-          {/*ToDo01 BottomSheetを二重にできるか確認→完了*/}
-          {/*ToDo02 フォームを設けられるか確認*/}
-          <Text style={styles.label}>First name</Text>
+          <Text style={styles.label}>プレゼント名</Text>
           <Controller
             control={control}
-            rules={{
-            required: true,
-            }}
+            rules={{required: true,}}
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
                 style={styles.input}
@@ -187,28 +198,43 @@ const OwnList : React.FunctionComponent<ListComponentProps> = () => {
                 value={value}
               />
             )}
-            name="firstName"
+            name="present_name"
           />
-          {errors.firstName && <Text>This is required.</Text>}
-          
-          <Text style={styles.label}>Last name</Text>
-          <Controller
-            control={control}
-            rules={{
-            maxLength: 100,
-            }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                style={styles.input}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-              />
-            )}
-            name="lastName"
-          />
-          <Button title="Submit" onPress={handleSubmit(onSubmit)} />
+          {errors.present_name && <Text>必須項目です</Text>}
 
+          {/*ToDo：ステータスをラジオボタンで実装する*/}
+          <Text style={styles.label}>プレゼントのステータス</Text>
+          <Controller
+            control={control}
+            rules={{maxLength: 100,}}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                style={styles.input}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+            name="present_status"
+          />
+
+          {/*ToDo：選択可能なユーザーから選ぶ形にする*/}
+          <Text style={styles.label}>送り先（受け取る人）</Text>
+          <Controller
+            control={control}
+            rules={{maxLength: 100,}}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                style={styles.input}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+            name="user_id_receive"
+          />
+
+          <Button title="Submit" onPress={handleSubmit(onSubmit)} />
           <Button
             buttonStyle={{
               borderRadius: 0,
@@ -242,7 +268,8 @@ const styles = StyleSheet.create({
     width: '50%',
   },
   label: {
-    color: 'white',
+    //color: 'white',
+    backgroundColor: '#ffffff',
     margin: 20,
     marginLeft: 0,
   },
@@ -254,7 +281,9 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   input: {
-    backgroundColor: 'white',
+    //backgroundColor: 'white',
+    //backgroundColor: '#ec5990',
+    backgroundColor: '#ffffff',
     //borderColor: 'none',
     height: 40,
     padding: 10,
