@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ListItem, ListItemProps, Avatar, BottomSheet, Card, Button, Image } from 'react-native-elements';
+import { ListItem, ListItemProps, Avatar, BottomSheet, Card, Button, Image, CheckBox } from 'react-native-elements';
 import { Auth, API } from 'aws-amplify';
 import { View, StyleSheet, Text, TextInput} from 'react-native';
 import { useForm, Controller } from "react-hook-form";
@@ -26,6 +26,7 @@ const OwnList : React.FunctionComponent<ListComponentProps> = () => {
   const [tmpIndex, setTmpIndex] = useState(0) //編集プレゼント情報
   const [isVisibleRead, setIsVisibleRead] = useState(false); //プレゼント編集モーダル表示フラグ
   const [isVisibleEdit, setIsVisibleEdit] = useState(false); //編集用モーダル表示フラグ
+  const [isSend, setIsSend] = useState(false); //プレゼント送信フラグ
 
   const getPresents = async () => {
     const apiName = 'APIGateway';
@@ -44,32 +45,24 @@ const OwnList : React.FunctionComponent<ListComponentProps> = () => {
     });
   }
 
-  //ToDo：インデックス情報を渡す
+  //プレゼント関連モーダルの操作
   const readPresent = (item, index:number) => {
     setIsVisibleRead(true);
     setTmpPresent(item);
     setTmpIndex(index);
   }
-
   const editPresent = (item, index:number) => {
     setIsVisibleEdit(true);
+    //フォームに選択されたプレゼントの情報を入力する
     setTmpPresent(item);
     setValue('present_name', tmpPresent['present_name'])
-    setValue('present_status', tmpPresent['present_status']['id'])
     setValue('user_id_receive', tmpPresent['user_id_receive'])
+    if(tmpPresent['present_status']['owner'] =='ph00'){
+      setIsSend(true);
+    } else {
+      setIsSend(false);
+    }
   }
-
-  //プレゼント編集フォームの設定
-  const { control, handleSubmit, reset, setValue, formState: { errors } } = useForm({
-  });
-  const onSubmit = data => {
-    console.log(data);
-    commitPresents(data);
-    reset();
-  };
-
-  //ToDo: プレゼント編集結果保存処理
-  //ToDo：レスポンス(単一の情報を差し込む)
   const commitPresents = async (data) => {
     const apiName = 'APIGateway';
     const path = '/dev/presents/commit-own'; 
@@ -103,9 +96,29 @@ const OwnList : React.FunctionComponent<ListComponentProps> = () => {
     })
     .catch(err => {
       console.log(err);
-    });
-    
+    }); 
   }
+
+  //プレゼント編集フォームの設定
+  const { control, handleSubmit, reset, setValue, formState: { errors } } = useForm({
+  });
+  const onSubmit = data => {
+    console.log(data);
+    commitPresents(data);
+    reset();
+  };
+
+  //プレゼント使用フラグの操作
+  const usePresent = (flag) => {
+    setIsSend(!flag)
+    if(isSend){
+      tmpPresent['present_status']['owner'] = 'ph01'
+    } else if (!isSend){
+      tmpPresent['present_status']['owner']  = 'ph00'
+    }
+  }
+
+  
 
   useEffect(() => {
     getPresents()
@@ -202,20 +215,17 @@ const OwnList : React.FunctionComponent<ListComponentProps> = () => {
           />
           {errors.present_name && <Text>必須項目です</Text>}
 
-          {/*ToDo：ステータスをラジオボタンで実装する*/}
+          {/*ToDo：ステータスをチェックボックスで実装する*/}
           <Text style={styles.label}>プレゼントのステータス</Text>
-          <Controller
-            control={control}
-            rules={{maxLength: 100,}}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                style={styles.input}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-              />
-            )}
-            name="present_status"
+          <CheckBox
+            center
+            title="Click Here"
+            checkedIcon="dot-circle-o"
+            uncheckedIcon="circle-o"
+            checked={!isSend}
+            onPress={() => {
+              usePresent(isSend)
+            }}
           />
 
           {/*ToDo：選択可能なユーザーから選ぶ形にする*/}
