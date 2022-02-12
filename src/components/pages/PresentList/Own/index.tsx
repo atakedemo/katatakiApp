@@ -12,6 +12,7 @@ type ListComponentProps = ListItemProps;
 
 const OwnList : React.FunctionComponent<ListComponentProps> = () => {
   const [presents, setPresents] = useState([]); //プレゼント一覧
+  const [follows, setFollows] = useState([]); //フォロー一覧
   const [tmpPresent, setTmpPresent] = useState({
     present_id: '-',
     present_name: '-',
@@ -23,11 +24,12 @@ const OwnList : React.FunctionComponent<ListComponentProps> = () => {
     present_images: [],
     user_id_receive: '-'
   }) //編集プレゼント情報
-  const [tmpIndex, setTmpIndex] = useState(0) //編集プレゼント情報
+  const [tmpIndex, setTmpIndex] = useState(0) //編集対象プレゼントのインデックス
   const [isVisibleRead, setIsVisibleRead] = useState(false); //プレゼント編集モーダル表示フラグ
   const [isVisibleEdit, setIsVisibleEdit] = useState(false); //編集用モーダル表示フラグ
   const [isSend, setIsSend] = useState(false); //プレゼント送信フラグ
 
+  //プレゼント操作：一覧の取得
   const getPresents = async () => {
     const apiName = 'APIGateway';
     const path = '/dev/presents/list-own'; 
@@ -39,6 +41,24 @@ const OwnList : React.FunctionComponent<ListComponentProps> = () => {
     API.get(apiName, path, reqInfo)
     .then(response => {
       setPresents(JSON.parse(response.body).Items)
+    })
+    .catch(err => {
+      console.log(err);
+    });
+  }
+  
+  //フォロー操作：一覧の取得
+  const getFollows = async () => {
+    const apiName = 'APIGateway';
+    const path = '/dev/follow/list-follow'; 
+    const reqInfo = { 
+      headers: { 
+        Authorization: `Bearer ${(await Auth.currentSession()).getIdToken().getJwtToken()}`,
+      },
+    };
+    API.get(apiName, path, reqInfo)
+    .then(response => {
+      setFollows(JSON.parse(response.body).Items)
     })
     .catch(err => {
       console.log(err);
@@ -56,7 +76,7 @@ const OwnList : React.FunctionComponent<ListComponentProps> = () => {
     //フォームに選択されたプレゼントの情報を入力する
     setTmpPresent(item);
     setValue('present_name', tmpPresent['present_name'])
-    setValue('user_id_receive', tmpPresent['user_id_receive'])
+    //setValue('user_id_receive', tmpPresent['user_id_receive'])
     if(tmpPresent['present_status']['owner'] =='ph00'){
       setIsSend(true);
     } else {
@@ -122,6 +142,7 @@ const OwnList : React.FunctionComponent<ListComponentProps> = () => {
 
   useEffect(() => {
     getPresents()
+    getFollows()
   }, []);
 
   return (
@@ -172,32 +193,26 @@ const OwnList : React.FunctionComponent<ListComponentProps> = () => {
             </View>
           </Card>
           <Button
-            buttonStyle={{
-              borderRadius: 0,
-              marginLeft: 0,
-              marginRight: 0,
-              marginBottom: 0,
-            }}
+            style={styles.button}
             title="編集"
             onPress={() => editPresent(tmpPresent, tmpIndex)}
           />
           <Button
-            buttonStyle={{
-              borderRadius: 0,
-              marginLeft: 0,
-              marginRight: 0,
-              marginBottom: 0,
-            }}
+            style={styles.button}
             title="キャンセル"
             onPress={() => setIsVisibleRead(false)}
           />
+          <Button
+            style={styles.button}
+            title="送信する"
+            onPress={() => setIsVisibleRead(false)}
+          />
         </BottomSheet>
-
-        {/*編集メニュー*/}
+        {/*送信先の選択リスト*/}
+        {/*編集メニュー(プレゼント名/コメント/写真)*/}
         <BottomSheet modalProps={{}} isVisible={isVisibleEdit} containerStyle={{height: '100%',backgroundColor: '#ffffff'}}>
           <Card containerStyle={{ marginTop: 0, marginLeft: 0,width: '100%' }}>
             <Card.Title>編集 : {tmpPresent['present_name']}</Card.Title>
-            <Text>h1 Heading</Text>
           </Card>
           <Text style={styles.label}>プレゼント名</Text>
           <Controller
@@ -216,10 +231,9 @@ const OwnList : React.FunctionComponent<ListComponentProps> = () => {
           {errors.present_name && <Text>必須項目です</Text>}
 
           {/*ToDo：ステータスをチェックボックスで実装する*/}
-          <Text style={styles.label}>プレゼントのステータス</Text>
           <CheckBox
             center
-            title="Click Here"
+            title="プレゼントを使用する"
             checkedIcon="dot-circle-o"
             uncheckedIcon="circle-o"
             checked={!isSend}
@@ -229,20 +243,7 @@ const OwnList : React.FunctionComponent<ListComponentProps> = () => {
           />
 
           {/*ToDo：選択可能なユーザーから選ぶ形にする*/}
-          <Text style={styles.label}>送り先（受け取る人）</Text>
-          <Controller
-            control={control}
-            rules={{maxLength: 100,}}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                style={styles.input}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-              />
-            )}
-            name="user_id_receive"
-          />
+          <Text style={styles.label}>送り先（受け取る人） : {tmpPresent['user_id_receive']}</Text>
 
           <Button title="Submit" onPress={handleSubmit(onSubmit)} />
           <Button
@@ -288,13 +289,13 @@ const styles = StyleSheet.create({
     color: 'white',
     height: 40,
     backgroundColor: '#ec5990',
-    borderRadius: 4,
+    borderRadius: 0,
+    marginLeft: 0,
+    marginRight: 0,
+    marginBottom: 0,
   },
   input: {
-    //backgroundColor: 'white',
-    //backgroundColor: '#ec5990',
     backgroundColor: '#ffffff',
-    //borderColor: 'none',
     height: 40,
     padding: 10,
     borderRadius: 4,
