@@ -1,0 +1,6 @@
+module Pods_KatatakiApp {
+  umbrella header "Pods-KatatakiApp-umbrella.h"
+
+  export *
+  module * { export * }
+}
