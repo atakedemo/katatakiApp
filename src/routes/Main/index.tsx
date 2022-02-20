@@ -1,8 +1,8 @@
 import React from 'react';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { HOME, MY_PAGE, SEARCH, FOLLOW_LIST, PRESENT_LIST } from '../../constants/screen';
-import { Search, MyPage , FollowList, PresentList} from '../../components/pages';
+import { HOME, MY_PAGE, FOLLOW_LIST, PRESENT_LIST, NEWPRESENT } from '../../constants/screen';
+import { MyPage , FollowList, PresentList, NewPresent} from '../../components/pages';
 import { COLOR } from '../../constants/theme';
 import Home from './Home';
 
@@ -43,11 +43,11 @@ export default function MainNavigator() {
         }}
       />
       <Tab.Screen
-        name={SEARCH}
-        component={Search}
+        name={NEWPRESENT}
+        component={NewPresent}
         options={{
           tabBarColor: COLOR.BOTTOM_TAB,
-          //tabBarLabel: '検索',
+          tabBarLabel: '新規作成',
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons
               name="plus-circle"

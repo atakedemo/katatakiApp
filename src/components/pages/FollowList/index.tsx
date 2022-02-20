@@ -13,8 +13,7 @@ const styles = StyleSheet.create({
 export default function MyPage() {
   return (
     <View style={styles.container}>
-      <Text>フォロー一覧</Text>
-      <Button title="Button1"/>
+      <Text>フォロー一覧(近日実装予定)</Text>
     </View>
   );
 }
