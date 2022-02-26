@@ -1,7 +1,8 @@
 //import React, { useState  }  from 'react';
 import React, { useState  } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { Tab, TabView } from 'react-native-elements'
+import { Tab, TabView } from 'react-native-elements';
+import Header from '../../common/Header';
 
 import OwnList from './Own';
 import ReceiveList from './Receive';
@@ -13,17 +14,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
-/*
-const routes = [
-  { key: 'tab1', title: 'タブ1' },
-  { key: 'tab2', title: 'タブ2' }
-];*/
 
 export default function PresentList() {
   const [index, setIndex] = useState(0);
 
   return (
     <View style={styles.container}>
+      <Header title="プレゼント一覧"/>
       <Tab
         value={index}
         onChange={(e) => setIndex(e)}

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Text, TextInput, Button, Alert  } from 'react-native';
 import { useForm, Controller } from "react-hook-form";
-import { ListItem, ListItemProps, Avatar, BottomSheet, Card, Image, CheckBox } from 'react-native-elements';
+import { ListItem, ListItemProps, Avatar, BottomSheet} from 'react-native-elements';
 import { Auth, API } from 'aws-amplify';
+import Header from '../../common/Header';
 
 type ListComponentProps = ListItemProps;
 
@@ -84,6 +85,7 @@ const NewPresent : React.FunctionComponent<ListComponentProps> = () => {
 
   //プレゼント使用フラグの操作
   const usePresent = (flag, user_id_receive) => {
+    console.log(flag)
     tmpPresent['present_status']['owner']  = 'ph00'
     tmpPresent['user_id_receive'] = user_id_receive
   }
@@ -93,68 +95,69 @@ const NewPresent : React.FunctionComponent<ListComponentProps> = () => {
   }, []);
 
   return (
-    <View style={styles.container}>
-    <Text style={styles.label}>プレゼント名</Text>
-    <Controller
-      control={control}
-      rules={{
-       required: true,
-      }}
-      render={({ field: { onChange, onBlur, value } }) => (
-        <TextInput
-          style={styles.input}
-          onBlur={onBlur}
-          onChangeText={onChange}
-          value={value}
-        />
-      )}
-      name="present_name"
-    />
-    {errors.present_name && <Text>必須項目です</Text>}
-    
-    <Text style={styles.label}>コメント</Text>
-    <Controller
-      control={control}
-      rules={{
-       maxLength: 100,
-      }}
-      render={({ field: { onChange, onBlur, value } }) => (
-        <TextInput
-          style={styles.input}
-          onBlur={onBlur}
-          onChangeText={onChange}
-          value={value}
-        />
-      )}
-      name="present_comment"
-    />
-    <Button title="作成する" onPress={handleSubmit(onSubmit)} />
-
-    {/*送信先の選択リスト*/}
-    <BottomSheet modalProps={{}} isVisible={isVisibleSend}>
-      {
-        follows.map((item, i) => (
-          <ListItem key={i} bottomDivider onPress={() => {
-            usePresent(false, item['user_id'])
-            //createPresent(tmpPresent);
-            setIsVisibleSend(false);
-          }}>
-            <Avatar source={{uri: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg'}} />
-            <ListItem.Content>
-              <ListItem.Title>{item['user_name']}</ListItem.Title>
-              <ListItem.Subtitle>{item['user_category']}</ListItem.Subtitle>
-            </ListItem.Content>
-            <ListItem.Chevron />
-          </ListItem>
-        ))
-      }
-      <Button
-        //style={styles.button}
-        title="キャンセル"
-        onPress={() => setIsVisibleSend(false)}
+    <View>
+      <Header title="プレゼント新規作成"/>
+      <Text style={styles.label}>プレゼント名</Text>
+      <Controller
+        control={control}
+        rules={{
+        required: true,
+        }}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <TextInput
+            style={styles.input}
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+          />
+        )}
+        name="present_name"
       />
-    </BottomSheet>
-  </View>
+      {errors.present_name && <Text>必須項目です</Text>}
+      
+      <Text style={styles.label}>コメント</Text>
+      <Controller
+        control={control}
+        rules={{
+        maxLength: 100,
+        }}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <TextInput
+            style={styles.input}
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+          />
+        )}
+        name="present_comment"
+      />
+      <Button title="作成する" onPress={handleSubmit(onSubmit)} />
+
+      {/*送信先の選択リスト*/}
+      <BottomSheet modalProps={{}} isVisible={isVisibleSend}>
+        {
+          follows.map((item, i) => (
+            <ListItem key={i} bottomDivider onPress={() => {
+              usePresent(false, item['user_id'])
+              //createPresent(tmpPresent);
+              setIsVisibleSend(false);
+            }}>
+              <Avatar source={{uri: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg'}} />
+              <ListItem.Content>
+                <ListItem.Title>{item['user_name']}</ListItem.Title>
+                <ListItem.Subtitle>{item['user_category']}</ListItem.Subtitle>
+              </ListItem.Content>
+              <ListItem.Chevron />
+            </ListItem>
+          ))
+        }
+        <Button
+          //style={styles.button}
+          title="キャンセル"
+          onPress={() => setIsVisibleSend(false)}
+        />
+      </BottomSheet>
+    </View>
   );
 }
 

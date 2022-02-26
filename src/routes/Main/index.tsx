@@ -31,6 +31,7 @@ export default function MainNavigator() {
         name={PRESENT_LIST}
         component={PresentList}
         options={{
+          title: 'プレゼント一覧',
           tabBarColor: COLOR.BOTTOM_TAB,
           tabBarLabel: 'プレゼント',
           tabBarIcon: ({ color }) => (
@@ -46,6 +47,7 @@ export default function MainNavigator() {
         name={NEWPRESENT}
         component={NewPresent}
         options={{
+          title: '新規作成',
           tabBarColor: COLOR.BOTTOM_TAB,
           tabBarLabel: '新規作成',
           tabBarIcon: ({ color }) => (
@@ -61,6 +63,7 @@ export default function MainNavigator() {
         name={FOLLOW_LIST}
         component={FollowList}
         options={{
+          title: 'フォロワー一覧',
           tabBarColor: COLOR.BOTTOM_TAB,
           tabBarLabel: 'フォロワー',
           tabBarIcon: ({ color }) => (
@@ -72,6 +75,7 @@ export default function MainNavigator() {
         name={MY_PAGE}
         component={MyPage}
         options={{
+          title: 'ユーザー設定',
           tabBarColor: COLOR.BOTTOM_TAB,
           tabBarLabel: 'ユーザー設定',
           tabBarIcon: ({ color }) => (
