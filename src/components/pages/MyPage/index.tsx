@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { ListItem, ListItemProps } from 'react-native-elements';
 import { Auth } from 'aws-amplify';
+import Header from '../../common/Header';
 
 
 const styles = StyleSheet.create({
@@ -29,10 +30,7 @@ const menuList = [
     title: 'アカウント情報変更',
   },
   {
-    title: '設定'
-  },
-  {
-    title: '設定'
+    title: 'アプリ設定'
   }
 ]
 
@@ -41,6 +39,7 @@ type ListComponentProps = ListItemProps;
 const MyPage : React.FunctionComponent<ListComponentProps> = () => {
   return (
     <View style={styles.container}>
+      <Header title="アカウント設定"/>
       {
         menuList.map((item, i) => (
           <ListItem 
