@@ -21,6 +21,8 @@ import com.reactnativecommunity.netinfo.NetInfoPackage;
 import com.reactnativecommunity.picker.RNCPickerPackage;
 // amazon-cognito-identity-js
 import com.amazonaws.RNAWSCognitoPackage;
+// react-native-camera
+import org.reactnative.camera.RNCameraPackage;
 // react-native-gesture-handler
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 // react-native-safe-area-context
@@ -79,6 +81,7 @@ public class PackageList {
       new NetInfoPackage(),
       new RNCPickerPackage(),
       new RNAWSCognitoPackage(),
+      new RNCameraPackage(),
       new RNGestureHandlerPackage(),
       new SafeAreaContextPackage(),
       new RNScreensPackage(),

@@ -2,6 +2,14 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Debug iOS Device",   
+            "cwd": "${workspaceFolder}",
+            "type": "reactnative",
+            "request": "launch",
+            "platform": "ios",
+            "runArguments": ["--device"]
+        },
+        {
             "name":"Debug Android",
             "request":"launch",
             "type":"reactnative",
