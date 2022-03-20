@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { ListItem, ListItemProps, Avatar, BottomSheet, Card, Button, Image, CheckBox } from 'react-native-elements';
+import { ListItem, ListItemProps, Avatar, BottomSheet, Card, Button, Image, CheckBox, TouchableOpacity } from 'react-native-elements';
 import { Auth, API } from 'aws-amplify';
 import { View, StyleSheet, Text, TextInput} from 'react-native';
 import { useForm, Controller } from "react-hook-form";
-//import { number } from 'yup';
-//import { Item } from 'react-native-paper/lib/typescript/components/List/List';
+import {RNCamera} from 'react-native-camera';
 
 const BASE_URI = 'https://katataki-prod-images.s3.ap-northeast-1.amazonaws.com/sample_cooking.png';
 

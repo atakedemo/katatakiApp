@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 import {Platform, StyleSheet, Text, TouchableOpacity, View, Image} from 'react-native';
-import {RNCamera} from 'react-native-camera';
+import Header from '../../common/Header';
+import PresentCamera from '../../common/PresentCamera';
+//import {RNCamera} from 'react-native-camera';
 
 const PendingView = () => (
   <View
@@ -16,21 +18,13 @@ const PendingView = () => (
 );
 
 const MyPage : React.FunctionComponent = () => {
-  const [imgUrl, setImgUrl] = useState([null])
-  //const path = JSON.stringify(imgUrl);
-  //const base64 = JSON.stringify(path);
-
-  const takePicture = async function(camera) {
-    const options = { quality: 0.5, base64: true ,fixOrientation:true};
-    const data = await camera.takePictureAsync(options);
-    //console.log(data.base64)
-    setImgUrl(data.base64)
-  };
+  const [imgUrl, setImgUrl] = useState([null]);
 
   return (
     <View style={styles.container}>
       <Text>フォロー一覧(近日実装予定)</Text>
-
+      <PresentCamera setImgUrl= {setImgUrl}/>
+      {/*
       <RNCamera
         style={styles.preview}
         type={RNCamera.Constants.Type.back}
@@ -50,6 +44,7 @@ const MyPage : React.FunctionComponent = () => {
            );
          }}
        </RNCamera>
+        */}
 
        {/*撮影した写真の表示->デフォルトの画像設定すれば問題解決しそう*/}
        {imgUrl &&
@@ -60,13 +55,6 @@ const MyPage : React.FunctionComponent = () => {
 }
 
 const styles = StyleSheet.create({
-  /*
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  */
   container: {
     flex: 1,
     flexDirection: 'column',
