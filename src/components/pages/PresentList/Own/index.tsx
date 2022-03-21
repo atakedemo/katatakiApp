@@ -3,7 +3,8 @@ import { ListItem, ListItemProps, Avatar, BottomSheet, Card, Button, Image, Chec
 import { Auth, API } from 'aws-amplify';
 import { View, StyleSheet, Text, TextInput} from 'react-native';
 import { useForm, Controller } from "react-hook-form";
-import {RNCamera} from 'react-native-camera';
+import PresentCamera from '../../../common/PresentCamera';
+import { number } from 'yup';
 
 const BASE_URI = 'https://katataki-prod-images.s3.ap-northeast-1.amazonaws.com/sample_cooking.png';
 
@@ -28,6 +29,8 @@ const OwnList : React.FunctionComponent<ListComponentProps> = () => {
   const [isVisibleRead, setIsVisibleRead] = useState(false); //プレゼント編集モーダル表示フラグ
   const [isVisibleEdit, setIsVisibleEdit] = useState(false); //編集用モーダル表示フラグ
   const [isVisibleSend, setIsVisibleSend] = useState(false); //送信先選択モーダル表示フラグ
+  const [isVisibleImg, setIsVisibleImg] = useState(false); //撮影メニュー表示フラグ
+  const [imgUrl, setImgUrl] = useState([null]); //撮影した写真の一時保存パラメータ
   const [isSend, setIsSend] = useState(false); //プレゼント送信フラグ
 
   //プレゼント操作：一覧の取得
@@ -84,6 +87,15 @@ const OwnList : React.FunctionComponent<ListComponentProps> = () => {
       setIsSend(false);
     }
   }
+  //撮影メニューの操作
+  const useTakePicture = (item, index:number, indexImg:number) => {
+    setImgUrl([null]);
+    setIsVisibleImg(true);
+    console.log(item)
+    console.log(index)
+    console.log(indexImg)
+  }
+
   //プレゼント操作：更新
   const commitPresents = async (data) => {
     const apiName = 'APIGateway';
@@ -143,147 +155,149 @@ const OwnList : React.FunctionComponent<ListComponentProps> = () => {
     getFollows()
   }, []);
 
-  return (
-    <View>
-      {
-        presents.map((item, i) => (
-          <ListItem key={i} bottomDivider onPress={() => readPresent(item, i)}>
-            <Avatar source={{uri: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg'}} />
-            <ListItem.Content>
-              <ListItem.Title>{item['present_name']}</ListItem.Title>
-              <ListItem.Subtitle>{item['user_id_owner']}</ListItem.Subtitle>
-            </ListItem.Content>
-            <ListItem.Chevron />
-          </ListItem>
-        ))
-      }
-
-      <BottomSheet modalProps={{}} isVisible={isVisibleRead} containerStyle={{height: '100%'}}>
-        <Card containerStyle={{ marginTop: 0, marginLeft: 0,width: '100%' }}>
-          <Card.Title>{tmpPresent['present_name']}</Card.Title>
-          <Card.Divider />
-          <Text>利用者: {tmpPresent['user_id_receive']}</Text>
-          <Text>h1 Heading</Text>
-          <Text>h1 Heading</Text>
-          <Text>h1 Heading</Text>
-          <Text>h1 Heading</Text>
-          <Text>h1 Heading</Text>
-          <Text style={{ marginBottom: 15}}>作成日: {tmpPresent['date_created']}</Text>
-          <View style={styles.imgList}>
-            <Image source={{ uri: BASE_URI}} containerStyle={styles.item} />
-            <Image source={{ uri: BASE_URI}} containerStyle={styles.item} />
-            <Image source={{ uri: BASE_URI}} containerStyle={styles.item} />
-            <Image source={{ uri: BASE_URI}} containerStyle={styles.item} />
-          </View>
-        </Card>
-        <Button
-          style={styles.button}
-          title="編集"
-          onPress={() => editPresent(tmpPresent, tmpIndex)}
-        />
-        <Button
-          style={styles.button}
-          title="キャンセル"
-          onPress={() => setIsVisibleRead(false)}
-        />
-        <Button
-          style={styles.button}
-          title="送信する"
-          onPress={() => setIsVisibleSend(true)}
-        />
-      </BottomSheet>
-
-      {/*送信先の選択リスト*/}
-      <BottomSheet modalProps={{}} isVisible={isVisibleSend}>
+  if (isVisibleImg) {
+    return <PresentCamera setImgUrl={setImgUrl} setIsVisibleImg={setIsVisibleImg}/>;
+  } else {
+    return (
+      <View>
         {
-          follows.map((item, i) => (
-            <ListItem key={i} bottomDivider onPress={() => {
-              usePresent(isSend, item['user_id'])
-              commitPresents(tmpPresent);
-              setIsVisibleSend(false);
-            }}>
+          presents.map((item, i) => (
+            <ListItem key={i} bottomDivider onPress={() => readPresent(item, i)}>
               <Avatar source={{uri: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg'}} />
               <ListItem.Content>
-                <ListItem.Title>{item['user_name']}</ListItem.Title>
-                <ListItem.Subtitle>{item['user_category']}</ListItem.Subtitle>
+                <ListItem.Title>{item['present_name']}</ListItem.Title>
+                <ListItem.Subtitle>{item['user_id_owner']}</ListItem.Subtitle>
               </ListItem.Content>
               <ListItem.Chevron />
             </ListItem>
           ))
         }
-        <Button
-          style={styles.button}
-          title="キャンセル"
-          onPress={() => setIsVisibleSend(false)}
-        />
-      </BottomSheet>
-      {/*編集メニュー(プレゼント名/コメント/写真)*/}
-      <BottomSheet modalProps={{}} isVisible={isVisibleEdit} containerStyle={{height: '100%',backgroundColor: '#ffffff'}}>
-        <Card containerStyle={{ marginTop: 0, marginLeft: 0,width: '100%' }}>
-          <Card.Title>編集 : {tmpPresent['present_name']}</Card.Title>
-        </Card>
-        <Text style={styles.label}>プレゼント名</Text>
-        <Controller
-          control={control}
-          rules={{required: true,}}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              style={styles.input}
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-            />
-          )}
-          name="present_name"
-        />
-        {errors.present_name && <Text>必須項目です</Text>}
-        
-        <Text style={styles.label}>コメント</Text>
-        <Controller
-          control={control}
-          rules={{
-          maxLength: 100,
-          }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              style={styles.input}
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-            />
-          )}
-          name="present_comment"
-        />
 
-        {/*ToDo：ステータスをチェックボックスで実装する*/}
-        <CheckBox
-          center
-          title="プレゼントを使用する"
-          checkedIcon="dot-circle-o"
-          uncheckedIcon="circle-o"
-          checked={!isSend}
-          onPress={() => {
-            usePresent(isSend, tmpPresent['user_id_receive'])
-          }}
-        />
+        <BottomSheet modalProps={{}} isVisible={isVisibleRead} containerStyle={{height: '100%'}}>
+          <Card containerStyle={{ marginTop: 0, marginLeft: 0,width: '100%' }}>
+            <Card.Title>{tmpPresent['present_name']}</Card.Title>
+            <Card.Divider />
+            <Text>利用者: {tmpPresent['user_id_receive']}</Text>
+            <Text>h1 Heading</Text>
+            <Text>h1 Heading</Text>
+            <Text>h1 Heading</Text>
+            <Text style={{ marginBottom: 15}}>作成日: {tmpPresent['date_created']}</Text>
+            <View style={styles.imgList}>
+            {imgUrl && <Image 
+                //source={{ uri: imgUrl==null ? BASE_URI : 'data:image/jpeg;base64,' + imgUrl}}
+                source={{ uri: 'data:image/jpeg;base64,' + imgUrl}}  
+                containerStyle={styles.item}
+                onPress={() => useTakePicture(tmpPresent, tmpIndex, 0)}
+              /> }
+            <Image source={{ uri: BASE_URI}} containerStyle={styles.item} />
+            <Image source={{ uri: BASE_URI}} containerStyle={styles.item} />
+            <Image source={{ uri: BASE_URI}} containerStyle={styles.item} />
+            </View>
+          </Card>
+          <Button
+            style={styles.button}
+            title="編集"
+            onPress={() => editPresent(tmpPresent, tmpIndex)}
+          />
+          <Button
+            style={styles.button}
+            title="キャンセル"
+            onPress={() => setIsVisibleRead(false)}
+          />
+          <Button
+            style={styles.button}
+            title="送信する"
+            onPress={() => setIsVisibleSend(true)}
+          />
+        </BottomSheet>
 
-        {/*ToDo：選択可能なユーザーから選ぶ形にする*/}
-        <Text style={styles.label}>送り先（受け取る人） : {tmpPresent['user_id_receive']}</Text>
+        {/*送信先の選択リスト*/}
+        <BottomSheet modalProps={{}} isVisible={isVisibleSend}>
+          {
+            follows.map((item, i) => (
+              <ListItem key={i} bottomDivider onPress={() => {
+                usePresent(isSend, item['user_id'])
+                commitPresents(tmpPresent);
+                setIsVisibleSend(false);
+              }}>
+                <Avatar source={{uri: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg'}} />
+                <ListItem.Content>
+                  <ListItem.Title>{item['user_name']}</ListItem.Title>
+                  <ListItem.Subtitle>{item['user_category']}</ListItem.Subtitle>
+                </ListItem.Content>
+                <ListItem.Chevron />
+              </ListItem>
+            ))
+          }
+          <Button
+            style={styles.button}
+            title="キャンセル"
+            onPress={() => setIsVisibleSend(false)}
+          />
+        </BottomSheet>
 
-        <Button title="Submit" onPress={handleSubmit(onSubmit)} />
-        <Button
-          buttonStyle={{
-            borderRadius: 0,
-            marginLeft: 0,
-            marginRight: 0,
-            marginBottom: 0,
-          }}
-          title="キャンセル"
-          onPress={() => setIsVisibleEdit(false)}
-        />
-      </BottomSheet>
-    </View>
-  );
+        {/*編集メニュー(プレゼント名/コメント/写真)*/}
+        <BottomSheet modalProps={{}} isVisible={isVisibleEdit} containerStyle={{height: '100%',backgroundColor: '#ffffff'}}>
+          <Card containerStyle={{ marginTop: 0, marginLeft: 0,width: '100%' }}>
+            <Card.Title>編集 : {tmpPresent['present_name']}</Card.Title>
+          </Card>
+          <Text style={styles.label}>プレゼント名</Text>
+          <Controller
+            control={control}
+            rules={{required: true,}}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                style={styles.input}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+            name="present_name"
+          />
+          {errors.present_name && <Text>必須項目です</Text>}
+          
+          <Text style={styles.label}>コメント</Text>
+          <Controller
+            control={control}
+            rules={{
+            maxLength: 100,
+            }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                style={styles.input}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+            name="present_comment"
+          />
+
+          {/*ToDo：ステータスをチェックボックスで実装する*/}
+          <CheckBox
+            center
+            title="プレゼントを使用する"
+            checkedIcon="dot-circle-o"
+            uncheckedIcon="circle-o"
+            checked={!isSend}
+            onPress={() => {
+              usePresent(isSend, tmpPresent['user_id_receive'])
+            }}
+          />
+
+          {/*ToDo：選択可能なユーザーから選ぶ形にする*/}
+          <Text style={styles.label}>送り先（受け取る人） : {tmpPresent['user_id_receive']}</Text>
+          <Button title="Submit" onPress={handleSubmit(onSubmit)} />
+          <Button
+            style={styles.button}
+            title="キャンセル"
+            onPress={() => setIsVisibleEdit(false)}
+          />
+        </BottomSheet>
+      </View>
+    );
+  }
 }
 
 

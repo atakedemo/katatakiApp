@@ -20,12 +20,11 @@ const PresentCamera : React.FunctionComponent = props => {
     const options = { quality: 0.5, base64: true ,fixOrientation:true};
     const data = await camera.takePictureAsync(options);
     props.setImgUrl(data.base64)
+    props.setIsVisibleImg(false)
   };
 
   return (
     <View style={styles.container}>
-      <Text>フォロー一覧(近日実装予定)</Text>
-
       <RNCamera
         style={styles.preview}
         type={RNCamera.Constants.Type.back}
