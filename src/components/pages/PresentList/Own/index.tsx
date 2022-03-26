@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { ListItem, ListItemProps, Avatar, BottomSheet, Card, Button, Image, CheckBox, TouchableOpacity } from 'react-native-elements';
+import { ListItem, ListItemProps, Avatar, BottomSheet, Card, Button, Image, CheckBox } from 'react-native-elements';
 import { Auth, API } from 'aws-amplify';
 import { View, StyleSheet, Text, TextInput} from 'react-native';
 import { useForm, Controller } from "react-hook-form";
 import PresentCamera from '../../../common/PresentCamera';
-import { number } from 'yup';
 
 const BASE_URI = 'https://katataki-prod-images.s3.ap-northeast-1.amazonaws.com/sample_cooking.png';
 
@@ -30,7 +29,7 @@ const OwnList : React.FunctionComponent<ListComponentProps> = () => {
   const [isVisibleEdit, setIsVisibleEdit] = useState(false); //編集用モーダル表示フラグ
   const [isVisibleSend, setIsVisibleSend] = useState(false); //送信先選択モーダル表示フラグ
   const [isVisibleImg, setIsVisibleImg] = useState(false); //撮影メニュー表示フラグ
-  const [imgUrl, setImgUrl] = useState([null]); //撮影した写真の一時保存パラメータ
+  const [imgIndex, setImgIndex] = useState(0); //撮影した写真の一時保存パラメータ
   const [isSend, setIsSend] = useState(false); //プレゼント送信フラグ
 
   //プレゼント操作：一覧の取得
@@ -88,12 +87,9 @@ const OwnList : React.FunctionComponent<ListComponentProps> = () => {
     }
   }
   //撮影メニューの操作
-  const useTakePicture = (item, index:number, indexImg:number) => {
-    setImgUrl([null]);
+  const useTakePicture = (index:number) => {
+    setImgIndex(index);
     setIsVisibleImg(true);
-    console.log(item)
-    console.log(index)
-    console.log(indexImg)
   }
 
   //プレゼント操作：更新
@@ -116,18 +112,21 @@ const OwnList : React.FunctionComponent<ListComponentProps> = () => {
     
     API.post(apiName, path, reqInfo)
     .then(response => {
-      console.log(response.body)
-      let tmplist = presents
-      //let resdata = JSON.parse(response.body).Attributes
-      console.log(JSON.parse(response.body).Attributes)
-      tmplist.splice(tmpIndex, 1, JSON.parse(response.body).Attributes)
-      setPresents(tmplist)
-      setIsVisibleEdit(false);
-      setIsVisibleRead(false);
+      console.log(response.body);
+      updatePresentList(response);
     })
     .catch(err => {
       console.log(err);
     }); 
+  }
+  //プレゼント一覧の更新
+  const updatePresentList = (response) => {
+    let tmplist = presents
+    console.log(JSON.parse(response.body).Attributes)
+    tmplist.splice(tmpIndex, 1, JSON.parse(response.body).Attributes)
+    setPresents(tmplist)
+    setIsVisibleEdit(false);
+    setIsVisibleRead(false);
   }
 
   //プレゼント編集フォームの設定
@@ -156,7 +155,7 @@ const OwnList : React.FunctionComponent<ListComponentProps> = () => {
   }, []);
 
   if (isVisibleImg) {
-    return <PresentCamera setImgUrl={setImgUrl} setIsVisibleImg={setIsVisibleImg}/>;
+    return <PresentCamera imgIndex={imgIndex} setTmpPresent={setTmpPresent} tmpPresent={tmpPresent} updatePresentList={updatePresentList} setIsVisibleImg={setIsVisibleImg}/>;
   } else {
     return (
       <View>
@@ -183,12 +182,12 @@ const OwnList : React.FunctionComponent<ListComponentProps> = () => {
             <Text>h1 Heading</Text>
             <Text style={{ marginBottom: 15}}>作成日: {tmpPresent['date_created']}</Text>
             <View style={styles.imgList}>
-            {imgUrl && <Image 
-                //source={{ uri: imgUrl==null ? BASE_URI : 'data:image/jpeg;base64,' + imgUrl}}
-                source={{ uri: 'data:image/jpeg;base64,' + imgUrl}}  
+            <Image 
+                source={{ uri: tmpPresent['present_images'][0] ? 'data:image/jpeg;base64,' + tmpPresent['present_images'][0] : BASE_URI}}
+                //source={{ uri: 'data:image/jpeg;base64,' + imgUrl}}  
                 containerStyle={styles.item}
-                onPress={() => useTakePicture(tmpPresent, tmpIndex, 0)}
-              /> }
+                onPress={() => useTakePicture(0)}
+              />
             <Image source={{ uri: BASE_URI}} containerStyle={styles.item} />
             <Image source={{ uri: BASE_URI}} containerStyle={styles.item} />
             <Image source={{ uri: BASE_URI}} containerStyle={styles.item} />
@@ -274,7 +273,6 @@ const OwnList : React.FunctionComponent<ListComponentProps> = () => {
             name="present_comment"
           />
 
-          {/*ToDo：ステータスをチェックボックスで実装する*/}
           <CheckBox
             center
             title="プレゼントを使用する"
@@ -286,7 +284,6 @@ const OwnList : React.FunctionComponent<ListComponentProps> = () => {
             }}
           />
 
-          {/*ToDo：選択可能なユーザーから選ぶ形にする*/}
           <Text style={styles.label}>送り先（受け取る人） : {tmpPresent['user_id_receive']}</Text>
           <Button title="Submit" onPress={handleSubmit(onSubmit)} />
           <Button

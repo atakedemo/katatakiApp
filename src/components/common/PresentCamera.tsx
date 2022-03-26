@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View, Image} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import { Auth, API } from 'aws-amplify';
 import {RNCamera} from 'react-native-camera';
 
 const PendingView = () => (
@@ -15,12 +16,42 @@ const PendingView = () => (
   </View>
 );
 
+{/*ToDo: 撮影後に写真をアップロードする*/}
 const PresentCamera : React.FunctionComponent = props => {
+  //プレゼント操作：写真のアップロード
+  const uploadImg = async (data, img, index:number) => {
+    const apiName = 'APIGateway';
+    const path = '/dev/presents/uploadimgs-receive';
+    data['present_images'][index] = img
+    const reqInfo = { 
+      headers: { 
+        Authorization: `Bearer ${(await Auth.currentSession()).getIdToken().getJwtToken()}`,
+      },
+      body: data,
+    };
+    
+    API.post(apiName, path, reqInfo)
+    .then(response => {
+      console.log(response.body);
+      console.log(JSON.parse(response.body));
+      props.setTmpPresent(JSON.parse(response.body).Attributes);
+      props.updatePresentList(response);
+      props.setIsVisibleImg(false)
+    })
+    .catch(err => {
+      console.log(err);
+    }); 
+  }
+
   const takePicture = async function(camera) {
     const options = { quality: 0.5, base64: true ,fixOrientation:true};
     const data = await camera.takePictureAsync(options);
-    props.setImgUrl(data.base64)
-    props.setIsVisibleImg(false)
+    var tmpPresentImg = props.tmpPresent
+    {/*写真アップロードAPIの実行処理->返却された値をtmpPresentへセットする*/}
+    uploadImg(tmpPresentImg, data.base64, 0)
+    //props.setTmpPresent(tmpPresentImg)
+    //props.setTmpPresent(data.base64)
+    //props.setIsVisibleImg(false)
   };
 
   return (
