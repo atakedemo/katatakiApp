@@ -163,7 +163,7 @@ const OwnList : React.FunctionComponent<ListComponentProps> = () => {
         {
           presents.map((item, i) => (
             <ListItem key={i} bottomDivider onPress={() => readPresent(item, i)}>
-              <Avatar source={{uri: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg'}} />
+              <Avatar source={{ uri: item['present_images'][0] ? item['present_images'][0] : BASE_URI}} />
               <ListItem.Content>
                 <ListItem.Title>{item['present_name']}</ListItem.Title>
                 <ListItem.Subtitle>{item['user_id_owner']}</ListItem.Subtitle>
@@ -175,23 +175,25 @@ const OwnList : React.FunctionComponent<ListComponentProps> = () => {
 
         <BottomSheet modalProps={{}} isVisible={isVisibleRead} containerStyle={{height: '100%'}}>
           <Card containerStyle={{ marginTop: 0, marginLeft: 0,width: '100%' }}>
-            <Card.Title>{tmpPresent['present_name']}</Card.Title>
+            <Card.Title>
+              {tmpPresent['present_name']}
+            </Card.Title>
             <Card.Divider />
-            <Text>利用者: {tmpPresent['user_id_receive']}</Text>
-            <Text>h1 Heading</Text>
-            <Text>h1 Heading</Text>
-            <Text>h1 Heading</Text>
+            <Text style={{ marginBottom: 15}}>利用者: {tmpPresent['user_id_receive']}</Text>
+            <Text>コメント: </Text>
+            <Text style={{ marginBottom: 15}}>{tmpPresent['present_comment']}</Text>
             <Text style={{ marginBottom: 15}}>作成日: {tmpPresent['date_created']}</Text>
             <View style={styles.imgList}>
-            <Image 
-                source={{ uri: tmpPresent['present_images'][0] ? 'data:image/jpeg;base64,' + tmpPresent['present_images'][0] : BASE_URI}}
-                //source={{ uri: 'data:image/jpeg;base64,' + imgUrl}}  
+              <Image 
+                source={{ uri: tmpPresent['present_images'][0] ? tmpPresent['present_images'][0] : BASE_URI}}
                 containerStyle={styles.item}
                 onPress={() => useTakePicture(0)}
               />
-            <Image source={{ uri: BASE_URI}} containerStyle={styles.item} />
-            <Image source={{ uri: BASE_URI}} containerStyle={styles.item} />
-            <Image source={{ uri: BASE_URI}} containerStyle={styles.item} />
+              <Image 
+              source={{ uri: tmpPresent['present_images'][1] ? tmpPresent['present_images'][1] : BASE_URI}}
+              containerStyle={styles.item}
+              onPress={() => useTakePicture(0)}
+              />
             </View>
           </Card>
           <Button
@@ -201,13 +203,13 @@ const OwnList : React.FunctionComponent<ListComponentProps> = () => {
           />
           <Button
             style={styles.button}
-            title="キャンセル"
-            onPress={() => setIsVisibleRead(false)}
+            title="送信する"
+            onPress={() => setIsVisibleSend(true)}
           />
           <Button
             style={styles.button}
-            title="送信する"
-            onPress={() => setIsVisibleSend(true)}
+            title="キャンセル"
+            onPress={() => setIsVisibleRead(false)}
           />
         </BottomSheet>
 
@@ -274,19 +276,8 @@ const OwnList : React.FunctionComponent<ListComponentProps> = () => {
             name="present_comment"
           />
 
-          <CheckBox
-            center
-            title="プレゼントを使用する"
-            checkedIcon="dot-circle-o"
-            uncheckedIcon="circle-o"
-            checked={!isSend}
-            onPress={() => {
-              usePresent(isSend, tmpPresent['user_id_receive'])
-            }}
-          />
-
           <Text style={styles.label}>送り先（受け取る人） : {tmpPresent['user_id_receive']}</Text>
-          <Button title="Submit" onPress={handleSubmit(onSubmit)} />
+          <Button title="保存する" onPress={handleSubmit(onSubmit)} />
           <Button
             style={styles.button}
             title="キャンセル"
@@ -302,14 +293,15 @@ const OwnList : React.FunctionComponent<ListComponentProps> = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
   },
   imgList: {
-    width: '100%',
+    width: 300,
     backgroundColor: '#ffffff',
     flex: 1,
     flexDirection: 'row',
+    //flexWrap: 'wrap',
   },
   item: {
     aspectRatio: 1,

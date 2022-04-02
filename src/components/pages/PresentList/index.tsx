@@ -41,7 +41,7 @@ export default function PresentList() {
           //icon={{ name: 'heart', type: 'ionicon', color: 'white' }}
         />
         <Tab.Item
-          title="cart"
+          title="トロフィー"
           titleStyle={{ fontSize: 12 }}
           //icon={{ name: 'cart', type: 'ionicon', color: 'white' }}
         />
