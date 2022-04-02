@@ -22,18 +22,20 @@ const PresentCamera : React.FunctionComponent = props => {
   const uploadImg = async (data, img, index:number) => {
     const apiName = 'APIGateway';
     const path = '/dev/presents/uploadimgs-receive';
-    data['present_images'][index] = img
+    //data['present_images'][index] = 'data:image/jpeg;,' + img
+    data['present_images']= ['data:image/jpeg;base64,' + img, 'XXX']
     const reqInfo = { 
       headers: { 
         Authorization: `Bearer ${(await Auth.currentSession()).getIdToken().getJwtToken()}`,
       },
       body: data,
     };
-    
+    //console.log(data['present_images'])
+    //console.log(reqInfo)
     API.post(apiName, path, reqInfo)
     .then(response => {
-      console.log(response.body);
-      console.log(JSON.parse(response.body));
+      console.log(response);
+      //console.log(JSON.parse(response.body));
       props.setTmpPresent(JSON.parse(response.body).Attributes);
       props.updatePresentList(response);
       props.setIsVisibleImg(false)

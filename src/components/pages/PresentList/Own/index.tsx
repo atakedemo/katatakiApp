@@ -122,7 +122,8 @@ const OwnList : React.FunctionComponent<ListComponentProps> = () => {
   //プレゼント一覧の更新
   const updatePresentList = (response) => {
     let tmplist = presents
-    console.log(JSON.parse(response.body).Attributes)
+    console.log(response)
+    //console.log(JSON.parse(response.body).Attributes)
     tmplist.splice(tmpIndex, 1, JSON.parse(response.body).Attributes)
     setPresents(tmplist)
     setIsVisibleEdit(false);
