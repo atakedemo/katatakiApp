@@ -1,8 +1,8 @@
 import React from 'react';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { HOME, MY_PAGE, FOLLOW_LIST, PRESENT_LIST, NEWPRESENT } from '../../constants/screen';
-import { MyPage , FollowList, PresentList, NewPresent} from '../../components/pages';
+import { HOME, MY_PAGE, FOLLOW_LIST, NEWPRESENT } from '../../constants/screen';
+import { MyPage , FollowList, NewPresent} from '../../components/pages';
 import { COLOR } from '../../constants/theme';
 import Home from './Home';
 
@@ -24,22 +24,6 @@ export default function MainNavigator() {
           
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="home" color={color} size={25} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name={PRESENT_LIST}
-        component={PresentList}
-        options={{
-          title: 'プレゼント一覧',
-          tabBarColor: COLOR.BOTTOM_TAB,
-          tabBarLabel: 'プレゼント',
-          tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons
-              name="gift-outline"
-              color={color}
-              size={25}
-            />
           ),
         }}
       />

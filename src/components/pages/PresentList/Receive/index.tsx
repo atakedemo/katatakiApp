@@ -4,12 +4,13 @@ import { Auth, API } from 'aws-amplify';
 import { View, StyleSheet, Text, TextInput} from 'react-native';
 import { useForm, Controller } from "react-hook-form";
 import PresentCamera from '../../../common/PresentCamera';
+import { DETAIL } from '../../../../constants/screen';
 
 const BASE_URI = 'https://katataki-prod-images.s3.ap-northeast-1.amazonaws.com/sample_cooking.png';
 
 type ListComponentProps = ListItemProps;
 
-const ReceiveList  : React.FunctionComponent<ListComponentProps> = () => {
+const ReceiveList  : React.FunctionComponent<ListComponentProps> = props => {
   const [presents, setPresents] = useState([]); //プレゼント一覧
   const [tmpPresent, setTmpPresent] = useState({
     present_id: '-',
@@ -141,7 +142,8 @@ const ReceiveList  : React.FunctionComponent<ListComponentProps> = () => {
       <View>
         {
           presents.map((item, i) => (
-            <ListItem key={i} bottomDivider onPress={() => readPresent(item, i)}>
+            //<ListItem key={i} bottomDivider onPress={() => readPresent(item, i)}>
+            <ListItem key={i} bottomDivider onPress={() => props.navigate(DETAIL, {present:item})}>
               <Avatar source={{ uri: item['present_images'][0] ? item['present_images'][0] : BASE_URI}} />
               <ListItem.Content>
                 <ListItem.Title>{item['present_name']}</ListItem.Title>
